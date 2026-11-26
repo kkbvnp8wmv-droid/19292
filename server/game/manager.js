@@ -152,7 +152,7 @@ export class TableManager {
       this.scheduleBroadcast(table);
       return { ok: true, seat: existing.seat, table };
     }
-    if (!table.findOpenSeat.call ? false : table.findOpenSeat() < 0) {
+    if (table.findOpenSeat() < 0) {
       return { ok: false, error: '牌桌已滿' };
     }
     const minBuyIn = table.minBuyIn;
