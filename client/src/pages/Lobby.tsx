@@ -120,7 +120,7 @@ export default function Lobby() {
     () =>
       [...tournaments]
         .filter((t) => t.status !== 'finished')
-        .sort((a, b) => (a.startsAt || 0) - (b.startsAt || 0))
+        .sort((a, b) => (a.startAt || 0) - (b.startAt || 0))
         .slice(0, 3),
     [tournaments],
   );
@@ -338,7 +338,7 @@ export default function Lobby() {
               <div className="t-main">
                 <div className="t-title">{t.name}</div>
                 <div className="t-sub">
-                  {t.typeLabel || t.type} · 買入 {fmt(t.buyIn || 0)} · 開賽 {clockText(t.startsAt)}
+                  {t.typeLabel || t.type} · 買入 {fmt(t.buyIn || 0)} · 開賽 {clockText(t.startAt)}
                 </div>
               </div>
               <div className="t-side">
