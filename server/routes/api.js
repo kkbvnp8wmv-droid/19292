@@ -205,7 +205,20 @@ export function createApi(manager, hub) {
       if (!fallback) return fail(res, 400, '目前沒有適合你的牌桌，請先領取免費積分');
       target = fallback;
     }
-    ok(res, { tableId: target.id, table: target });
+    const rec = db.getTableRecord(target.id);
+    if (!rec) return fail(res, 400, '找不到牌桌');
+    const defaultBuyIn = Math.max(
+      rec.minBuyIn,
+      Math.min(rec.maxBuyIn, Math.floor(req.user.chips * 0.25)),
+    );
+    const joined = manager.sit(rec.id, req.user, defaultBuyIn);
+    if (!joined.ok) return fail(res, 400, joined.error);
+    ok(res, {
+      tableId: rec.id,
+      table: target,
+      seat: joined.seat,
+      user: safeUser(db.getUser(req.user.id)),
+    });
   });
 
   router.post('/tables/:id/join', auth, (req, res) => {
