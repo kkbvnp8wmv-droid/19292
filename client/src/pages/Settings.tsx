@@ -68,10 +68,10 @@ export default function Settings() {
         <div className="section-label" style={{ marginTop: 0 }}>
           音效與動畫
         </div>
-        <Switch checked={!!settings.sound} onChange={(v) => patch('sound', v)} label="音效" desc="發牌、籌碼與獲勝音效" />
-        <Switch checked={!!settings.music} onChange={(v) => patch('music', v)} label="背景音樂" desc="俱樂部大廳音樂" />
+        <Switch on={!!settings.sound} onChange={(v) => patch('sound', v)} label="音效" desc="發牌、籌碼與獲勝音效" />
+        <Switch on={!!settings.music} onChange={(v) => patch('music', v)} label="背景音樂" desc="俱樂部大廳音樂" />
         <Switch
-          checked={!!settings.lowPerformance}
+          on={!!settings.lowPerformance}
           onChange={(v) => patch('lowPerformance', v)}
           label="低效能模式"
           desc="關閉高耗資源動畫，較舊手機更順暢"
@@ -125,13 +125,13 @@ export default function Settings() {
           </div>
         </div>
         <Switch
-          checked={!!settings.fourColor}
+          on={!!settings.fourColor}
           onChange={(v) => patch('fourColor', v)}
           label="四色牌面"
           desc="以四種顏色區分花色，更容易辨識"
         />
         <Switch
-          checked={!!settings.autoMuck}
+          on={!!settings.autoMuck}
           onChange={(v) => patch('autoMuck', v)}
           label="自動棄牌"
           desc="結束牌局自動收起底牌"
@@ -143,7 +143,7 @@ export default function Settings() {
           通知與隱私
         </div>
         <Switch
-          checked={!!settings.notifications}
+          on={!!settings.notifications}
           onChange={(v) => patch('notifications', v)}
           label="遊戲通知"
           desc="好友邀請、賽事開賽與牌桌邀請"

@@ -67,8 +67,18 @@ export function Sheet({
   );
 }
 
-export function Switch({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label?: string }) {
-  return (
+export function Switch({
+  on,
+  onChange,
+  label,
+  desc,
+}: {
+  on: boolean;
+  onChange: (v: boolean) => void;
+  label?: string;
+  desc?: string;
+}) {
+  const button = (
     <button
       className={`switch ${on ? 'on' : ''}`}
       onClick={() => onChange(!on)}
@@ -76,6 +86,16 @@ export function Switch({ on, onChange, label }: { on: boolean; onChange: (v: boo
       aria-pressed={on}
       type="button"
     />
+  );
+  if (!label && !desc) return button;
+  return (
+    <div className="switch-row">
+      <div className="switch-text">
+        {label ? <b>{label}</b> : null}
+        {desc ? <span>{desc}</span> : null}
+      </div>
+      {button}
+    </div>
   );
 }
 

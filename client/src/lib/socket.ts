@@ -1,10 +1,11 @@
 // Socket.IO 連線管理（單一連線，自動重連）
 import { io, type Socket } from 'socket.io-client';
+import { getToken } from './api';
 
 let socket: Socket | null = null;
 let currentToken: string | null = null;
 
-export function connectSocket(token: string): Socket {
+export function connectSocket(token: string = getToken() || ''): Socket {
   if (socket && currentToken === token) return socket;
   if (socket) {
     socket.removeAllListeners();
