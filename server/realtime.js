@@ -1,6 +1,6 @@
 // Socket.IO 即時同步：牌桌狀態、行動、聊天、表情、斷線重連
 import { Server } from 'socket.io';
-import * as db from '../db.js';
+import * as db from './db.js';
 
 export function attachRealtime(httpServer, manager, hub) {
   const io = new Server(httpServer, {
