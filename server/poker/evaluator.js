@@ -27,7 +27,7 @@ function sortDesc(arr) {
 }
 
 // 回傳順子的最高張（A 可作 1 用），無順子回傳 0
-export function straigthHigh(uniqueDesc) {
+export function straightHigh(uniqueDesc) {
   const set = new Set(uniqueDesc);
   if (set.has(14)) set.add(1);
   const vals = [...set].sort((a, b) => b - a);
@@ -43,7 +43,7 @@ export function straigthHigh(uniqueDesc) {
   return 0;
 }
 
-function straigthRanks(high) {
+function straightRanks(high) {
   const out = [];
   for (let i = 0; i < 5; i += 1) {
     let v = high - i;
@@ -56,20 +56,6 @@ function straigthRanks(high) {
 function cardsOfRank(cards, rank, limit) {
   const out = cards.filter((c) => RANK_VALUE[c[0]] === rank);
   return limit ? out.slice(0, limit) : out;
-}
-
-function pickBest(cards, ranks) {
-  // 依傳入的 rank 順序挑出實際牌張（每個 rank 取一張，重複 rank 需求以 count 表示）
-  const used = new Set();
-  const out = [];
-  for (const need of ranks) {
-    const found = cards.find((c) => RANK_VALUE[c[0]] === need.rank && !used.has(c));
-    if (found) {
-      used.add(found);
-      out.push(found);
-    }
-  }
-  return out;
 }
 
 function encodeScore(cat, kickers) {
@@ -109,9 +95,9 @@ export function evaluateHand(cards) {
   if (flushSuet) {
     const flushCards = cards.filter((c) => c[1] === flushSuet);
     const flushRanks = sortDesc([...new Set(flushCards.map((c) => RANK_VALUE[c[0]]))]);
-    const high = straigthHigh(flushRanks);
+    const high = straightHigh(flushRanks);
     if (high) {
-      const wanted = straigthRanks(high);
+      const wanted = straightRanks(high);
       const best = wanted.map((r) => flushCards.find((c) => RANK_VALUE[c[0]] === r));
       const cat = high === 14 ? CAT_ROYAL : CAT_STRAIGHT_FLUSH;
       return {
@@ -145,7 +131,7 @@ export function evaluateHand(cards) {
   const trips = rankCounts.filter((x) => x.count >= 3);
   const pairs = rankCounts.filter((x) => x.count >= 2);
   if (trips.length >= 1) {
-    const tripRank = tripps[0].rank;
+    const tripRank = trips[0].rank;
     const pairCandidate = pairs.find((x) => x.rank !== tripRank);
     if (pairCandidate) {
       const kickers = [tripRank, pairCandidate.rank];
@@ -178,9 +164,9 @@ export function evaluateHand(cards) {
   }
 
   // 5. 順子
-  const high = straigthHigh(uniqueDesc);
+  const high = straightHigh(uniqueDesc);
   if (high) {
-    const wanted = straigthRanks(high);
+    const wanted = straightRanks(high);
     const best = [];
     const used = new Set();
     for (const r of wanted) {
@@ -203,7 +189,7 @@ export function evaluateHand(cards) {
 
   // 6. 三條
   if (trips.length >= 1) {
-    const tripRank = tripps[0].rank;
+    const tripRank = trips[0].rank;
     const kickers = [tripRank];
     for (const x of rankCounts) {
       if (x.rank !== tripRank && kickers.length < 3) kickers.push(x.rank);
