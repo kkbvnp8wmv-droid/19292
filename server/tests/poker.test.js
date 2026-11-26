@@ -49,6 +49,11 @@ test('牌組為 52 張且不重複', () => {
   assert.equal(new Set(deck).size, 52);
 });
 
+const created = [];
+after(() => {
+  for (const t of created) t.destroy();
+});
+
 function makeTable(maxPlayers = 3) {
   const events = [];
   const table = new PokerTable({
@@ -62,6 +67,7 @@ function makeTable(maxPlayers = 3) {
     config: { bots: false, actionTimeoutMs: 600000, nextHandDelay: 600000 },
     hooks: { onEvent: (_t, ev) => events.push(ev) },
   });
+  created.push(table);
   return { table, events };
 }
 test('發牌順序與盲注位置正確（3 人桌）', () => {
@@ -159,7 +165,8 @@ test('平手時底池平均分配', () => {
   const winners = table.results.winners;
   assert.equal(winners.length, 2, '兩位玩家都應獲勝');
   assert.equal(winners[0].amount + winners[1].amount, 100);
-  assert.equal(table.occupiedSeats().reduce((a, s) => a + s.stack, 0), 1100);
+  // 兩人都從 500 起手，SB 已投 5、BB 已投 10，攤牌後回收 100 底池
+  assert.equal(table.occupiedSeats().reduce((a, s) => a + s.stack, 0), 1085);
 });
 
 test('加注需符合最小加注額', () => {
