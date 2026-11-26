@@ -1,5 +1,5 @@
 // 撲克規則引擎測試：牌型、下注輪、邊池、分池、平手
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import { evaluateHand, CAT_NAMES } from '../poker/evaluator.js';
 import { PokerTable } from '../poker/table.js';
@@ -24,7 +24,7 @@ test('A2345 視為五高順子，且小於 23456', () => {
   const wheel = evaluateHand(['Ah', '2d', '3c', '4s', '5h', '9d', 'Kc']);
   const six = evaluateHand(['2h', '3d', '4c', '5s', '6h', '9d', 'Kc']);
   assert.equal(wheel.category, 4);
-  assert.equal(wheel.ranks[0], 5);
+  assert.equal(wheel.kickers[0], 5);
   assert.equal(six.category, 4);
   assert.ok(evaluateHand(['2h', '3d', '4c', '5s', '6h']).score > wheel.score);
 });
@@ -64,7 +64,6 @@ function makeTable(maxPlayers = 3) {
   });
   return { table, events };
 }
-
 test('發牌順序與盲注位置正確（3 人桌）', () => {
   const { table } = makeTable(3);
   table.seatPlayer({ userId: 'p1', name: 'P1', stack: 1000 });
@@ -109,7 +108,7 @@ test('棄牌後剩餘玩家直接贏得底池', () => {
   table.act(first.seat, 'fold');
   assert.equal(table.state, 'showdown');
   const other = table.occupiedSeats().find((s) => s.userId !== first.userId);
-  assert.equal(other.stack, 1015); // 1000 - 5 + 20
+  assert.equal(other.stack, 1005); // 1000 - 10 + 15（BB 投入 10，贏回 15）
 });
 
 test('All-in 邊池分配正確（三方不同籌碼）', () => {
@@ -146,9 +145,16 @@ test('平手時底池平均分配', () => {
   // 強制公共牌為同一副牌（雙方最佳牌型相同）
   table.board = ['As', 'Ks', 'Qs', 'Js', 'Ts'];
   table.seats.forEach((s) => {
-    if (s) s.cards = ['2h', '3d'];
+    if (s) {
+      s.cards = ['2h', '3d'];
+      s.committed = 50;
+      s.bet = 0;
+      s.folded = false;
+      s.allIn = false;
+    }
   });
-  table.pot = 100;
+  table.syncPot();
+  assert.equal(table.pot, 100);
   table.showdown();
   const winners = table.results.winners;
   assert.equal(winners.length, 2, '兩位玩家都應獲勝');
