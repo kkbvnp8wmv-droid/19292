@@ -507,6 +507,38 @@ a {
   background: #eafff6;
 }
 
+.switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.switch-row:last-child {
+  border-bottom: none;
+}
+
+.switch-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.switch-text b {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.switch-text span {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
 /* ---------- 頭像 ---------- */
 .avatar {
   border-radius: 50%;

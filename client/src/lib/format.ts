@@ -75,6 +75,19 @@ export function cardParts(card: string): { rank: string; suit: string; red: bool
   return { rank, suit: SUIT_SYMBOL[suit] || suit, red: suit === 'h' || suit === 'd', hidden: false };
 }
 
+export const HAND_LABEL = [
+  '高牌',
+  '一對',
+  '兩對',
+  '三條',
+  '順子',
+  '同花',
+  '葫蘆',
+  '四條',
+  '同花順',
+  '皇家同花順',
+];
+
 export const ACTION_LABEL: Record<string, string> = {
   fold: '棄牌',
   check: '過牌',

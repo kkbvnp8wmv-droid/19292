@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
-import { fmt, fmtFull, dateText, RANK_LABEL } from '../lib/format';
+import { fmt, fmtFull, dateText, HAND_LABEL } from '../lib/format';
 import { useAuth } from '../state/auth';
 import { Avatar, AVATAR_OPTIONS } from '../components/Avatar';
 import { Sheet, Stat, useToast } from '../components/ui';
@@ -170,7 +170,7 @@ export default function Profile() {
               count > 0 ? (
                 <div className="tile" key={idx}>
                   <div className="t-main">
-                    <div className="t-title">{(RANK_LABEL as string[])[idx] || `牌型 ${idx}`}</div>
+                    <div className="t-title">{HAND_LABEL[idx] || `牌型 ${idx}`}</div>
                     <div className="t-sub">累積次數</div>
                   </div>
                   <div className="t-side">
